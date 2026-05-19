@@ -1,7 +1,6 @@
 `timescale 1ns / 1ps
 
 
-
 module sign_extended(
 input logic [31:7] InstrD,
 input logic [1:0]ImmSrcD,
