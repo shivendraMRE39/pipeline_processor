@@ -64,7 +64,6 @@ end
     //datamemory instantiation 
      data_memory  data_memory(
      .clk(clk),
-     
      .A(ALUResultM),
      .WD(StoreData),
      .WE(MemWriteM),

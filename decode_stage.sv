@@ -34,7 +34,8 @@ output logic [2:0] BranchTypeE
    
    logic RegWriteD, MemWriteD, JumpD, BranchD, ALUSrcD;
   
-   logic [1:0] ResultSrcD, ImmSrcD;
+   logic [1:0] ResultSrcD;
+   logic [2:0] ImmSrcD;
    logic [3:0] ALUcontrolD;
    logic [31:0] RD1, RD2;
    logic [31:0] ImmExtD;

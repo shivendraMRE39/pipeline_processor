@@ -28,21 +28,7 @@ output logic [31:0] RD2
  begin 
  for (int i = 0; i < 32; i++) begin
             reg_mem[i] = 32'b0;
-           end
-//         reg_mem[1] = 32'd6;  
-//         reg_mem[2] = 32'd10;
-//         reg_mem[3] = -32'd5     ;
-//         reg_mem[4] = -32'd7;
-//         reg_mem[5] = -32'd9;
-//         reg_mem[6] = 32'd3;
-//         reg_mem[7] = 32'd11;
-//         reg_mem[8] = 32'd16;
-//         reg_mem[9] = 32'd100;
-//         reg_mem[10] = 32'd21;
-//         reg_mem[11] = -32'd25;
-//         reg_mem[12] = 32'd26;
-         
-//        
+           end       
          end
          
          always_ff @(negedge clk)

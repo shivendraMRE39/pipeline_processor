@@ -10,7 +10,7 @@ output logic ALUSrc,
 output logic MemWrite,
 output logic Branch,
 output logic Jump,
-output logic [1:0] ImmSrc, 
+output logic [2:0] ImmSrc, 
 output logic [1:0]ResultSrc,
 output logic [1:0] ALUop,
 output logic [2:0] LoadType,
@@ -27,80 +27,92 @@ always_comb begin
     MemWrite = 0;
     Branch   = 0;
     Jump     = 0;
-    ImmSrc   = 2'b00;
+    ImmSrc   = 3'b000;
     ResultSrc= 2'b00;
     ALUop    = 2'b00;
     LoadType = 3'b010;    // default LW
     StoreType = 3'b010;   //default Sw
     BranchType = 3'b000;  //default beq
+case (Opcode)
 
-    case (Opcode)
-        7'b0110011: begin // R-type
-            RegWrite = 1;
-            ALUop    = 2'b10;
-        end
+    7'b0110011: begin // R-type
+        RegWrite = 1;
+        ALUop    = 2'b10;
+    end
 
-        7'b0010011: begin // I-type
-            RegWrite = 1;
-            ALUSrc   = 1;
-            ALUop    = 2'b10;
-        end
+    7'b0010011: begin // I-type
+        RegWrite = 1;
+        ALUSrc   = 1;
+        ALUop    = 2'b10;
+        ImmSrc   = 3'b000;
+    end
 
-        7'b0000011: begin // load
-            RegWrite = 1;
-            ALUSrc   = 1;
-            ResultSrc= 2'b01;
-            
-            case(funct3)
+    7'b0000011: begin // load
+        RegWrite = 1;
+        ALUSrc   = 1;
+        ResultSrc= 2'b01;
+        ImmSrc   = 3'b000;
+
+        case(funct3)
             3'b000 : LoadType = 3'b000;  // LB
             3'b001 : LoadType = 3'b001;  // LH
             3'b010 : LoadType = 3'b010;  // LW
-            3'b100 : LoadType = 3'b011;  //LBU 
-            3'b101 : LoadType = 3'b100;  //LHU
+            3'b100 : LoadType = 3'b011;  // LBU
+            3'b101 : LoadType = 3'b100;  // LHU
             default: LoadType = 3'b010;
-            endcase 
-            
-           
-        end
+        endcase
+    end
 
-        7'b0100011: begin // store
-            ALUSrc   = 1;
-            MemWrite = 1;
-            ImmSrc   = 2'b01;
-            
-            case(funct3)
-            3'b000 : StoreType = 3'b000;    //SB
-            3'b001 : StoreType = 3'b001;    // SH
-            3'b010 : StoreType = 3'b010;    // SW
-            default : StoreType = 3'b010;
-            endcase
-        end
+    7'b0100011: begin // store
+        ALUSrc   = 1;
+        MemWrite = 1;
+        ImmSrc   = 3'b001;
 
-        7'b1100011: begin // branch
-            Branch = 1;
-            ALUop  = 2'b01;
-            ImmSrc = 2'b10;
-            
-            case(funct3)
-            3'b000 : BranchType = 3'b000;   //beq
-            3'b001 : BranchType = 3'b001;   //bne
-            3'b100 : BranchType = 3'b010;   //blt
-            3'b101 : BranchType = 3'b011;   //bge
-            3'b110 : BranchType = 3'b100;   //bltu
-            3'b111 : BranchType = 3'b101;   //bgeu
-            default: BranchType = 3'b000;   //default
-            endcase
-        end
+        case(funct3)
+            3'b000 : StoreType = 3'b000; // SB
+            3'b001 : StoreType = 3'b001; // SH
+            3'b010 : StoreType = 3'b010; // SW
+            default: StoreType = 3'b010;
+        endcase
+    end
 
-        7'b1101111: begin // jal
-            RegWrite = 1;
-            Jump     = 1;
-            ResultSrc= 2'b10;
-            ImmSrc   = 2'b11;
-        end
-    endcase
-end
-                  
-                                   
-                      
+    7'b1100011: begin // branch
+        Branch = 1;
+        ALUop  = 2'b01;
+        ImmSrc = 3'b010;
+
+        case(funct3)
+            3'b000 : BranchType = 3'b000; // BEQ
+            3'b001 : BranchType = 3'b001; // BNE
+            3'b100 : BranchType = 3'b010; // BLT
+            3'b101 : BranchType = 3'b011; // BGE
+            3'b110 : BranchType = 3'b100; // BLTU
+            3'b111 : BranchType = 3'b101; // BGEU
+            default: BranchType = 3'b000;
+        endcase
+    end
+
+    7'b1101111: begin // JAL
+        RegWrite = 1;
+        Jump     = 1;
+        ResultSrc= 2'b10;
+        ImmSrc   = 3'b011;
+    end
+
+    7'b0110111: begin // LUI
+        RegWrite = 1;
+        ALUSrc   = 1;
+        ImmSrc   = 3'b100;
+        ALUop    = 2'b00;
+    end
+
+//    7'b0010111: begin // AUIPC
+//        RegWrite = 1;
+//        ALUSrc   = 1;
+//        ImmSrc   = 3'b100;
+//        ALUop    = 2'b00;
+//    end
+
+endcase 
+end    
 endmodule

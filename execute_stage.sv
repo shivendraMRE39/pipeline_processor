@@ -146,7 +146,7 @@ mux_3_1 muxforwardBE(
    WriteDataM <= WriteDataE;
    RdM        <= RdE;
    PCPlus4M   <= PCPlus4E;
-   LoadTypeM <= LoadTypeE;
+   LoadTypeM  <= LoadTypeE;
    StoreTypeM <= StoreTypeE;
    end 
    end
