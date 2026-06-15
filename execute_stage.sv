@@ -51,23 +51,37 @@ output logic [2:0] StoreTypeM
     logic [31:0] WriteDataE;
     logic [31:0] SrcAE;
 
-logic take_branch;
+    logic take_branch;
 
 //Branch_logics 
-always_comb begin
-  take_branch = 1'b0;   //  default 
-if (BranchE) begin
-    case (BranchTypeE)
-        3'b000: take_branch = (SrcAE == WriteDataE);       //beq
-        3'b001: take_branch = (SrcAE != WriteDataE);       // bne
-        3'b010: take_branch = ($signed(SrcAE) < $signed(WriteDataE));     //blt
-        3'b011: take_branch = ($signed(SrcAE) >= $signed(WriteDataE));    // bge
-        3'b100: take_branch = (SrcAE < WriteDataE);     // bltu
-        3'b101: take_branch = (SrcAE >= WriteDataE);     // bgeu
-        default: take_branch = 1'b0;
-    endcase
-end
-end
+
+//always_comb begin
+//  take_branch = 1'b0;   //  default 
+//if (BranchE) begin
+//    case (BranchTypeE)
+//        3'b000: take_branch = (SrcAE == WriteDataE);       //beq
+//        3'b001: take_branch = (SrcAE != WriteDataE);       // bne
+//        3'b010: take_branch = ($signed(SrcAE) < $signed(WriteDataE));     //blt
+//        3'b011: take_branch = ($signed(SrcAE) >= $signed(WriteDataE));    // bge
+//        3'b100: take_branch = (SrcAE < WriteDataE);     // bltu
+//        3'b101: take_branch = (SrcAE >= WriteDataE);     // bgeu
+//        default: take_branch = 1'b0;
+//    endcase
+//end
+//end
+
+
+branch_unit branch_unit_inst(
+
+    .BranchE(BranchE),
+    .BranchTypeE(BranchTypeE),
+
+    .Rs1Data(SrcAE),
+    .Rs2Data(WriteDataE),
+
+    .TakeBranch(take_branch)
+
+    );
 
 assign PCSrcE = (BranchE & take_branch) || JumpE;
 
