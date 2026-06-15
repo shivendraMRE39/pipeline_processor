@@ -32,6 +32,6 @@ output logic [WIDTH-1 : 0] rd
         instr_mem[i] = 32'h00000013; // NOP
 
     // Step 2: Load actual instructions
-    $readmemh("instruction_hexfile.hex", instr_mem);
+    $readmemh("instruction_hexfile1.hex", instr_mem);
 end
 endmodule
